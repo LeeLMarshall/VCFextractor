@@ -22,18 +22,20 @@ To run VCFextractor simply call the following command in the terminal
 COMMAND == VCFextractor.sh PATH/TO/FILE.vcf [OPTIONS] [OUTPUT]
 
 ----- OPTIONS 
-If not options are included, all options will be outputted
+If no options are included, all options will be outputted
+The order of the options placed in command will represent the output order
 
 --INFO == Output from VCF chromosome(#CHROM), position(POS), reference allele(REF) and alternative allele(ALT)
 --Variant_Type == Output from VCF TYPE Variant Type(Variant_Type)
 --Total_Read_Depth == Output from VCF DP Total Read Depth(Total_Read_Depth)
 --Variant_Read_Depth == Output from VCF AO Variant Read Depth(Variant_Read_Depth)
 --Reference_Read_Depth == Output from VCF RO Reference Read Depth(Reference_Read_Depth)
---Percentage_Variant_Reads == Output from VCF Percentage Variant Reads(Percentage_Variant_Reads) 
---Variant_Allele_Frequency == Output from VCF Variant Allele Frequency(Variant_Allele_Frequency)
---ExAC_ALL or --ExAC_ordered_csqs == Output from ExAC Browser Variant Orderred Consequence(ExAC_ordered_csqs)
---ExAC_ALL or --ExAC_allele_freq == Output from ExAC Browser Variant Allele Frequency(ExAC_allele_freq)
---ExAC_ALL or --ExAC_rsid == Output from ExAC Browser Variant RSID(ExAC_rsid)
+--Percentage_Variant_Reads == Output from VCF AO/(AO+RO)x100 Percentage Variant Reads(Percentage_Variant_Reads) 
+--Variant_Allele_Frequency == Output from VCF AF Variant Allele Frequency(Variant_Allele_Frequency)  
+--ExAC_ALL == Output from ExAC Browser Variant Consequence(ExAC_ordered_csqs), Allele Frequency(ExAC_allele_freq), RSID(ExAC_rsid)  
+--ExAC_ordered_csqs == Output from ExAC Browser Variant Orderred Consequence(ExAC_ordered_csqs)  
+--ExAC_allele_freq == Output from ExAC Browser Variant Allele Frequency(ExAC_allele_freq)  
+--ExAC_rsid == Output from ExAC Browser Variant RSID(ExAC_rsid)  
 
 ----- OUTPUT
 -tsv == Tab separated file (default)
@@ -50,6 +52,7 @@ VCFextractor.sh coding_challenge_final.vcf \
 --ExAC_allele_freq \
 --ExAC_rsid \
 --INFO \
+--Reference_Read_Depth \
 -csv
 '
 	exit 0
@@ -172,12 +175,10 @@ then
 	if [ -z "${2}" ] || [[ "$@" == *"--Variant_Allele_Frequency"* ]]
 	then 
 		echo "VARIANT ALLELE FREQUENCY OUTPUTTED == Variant_Allele_Frequency"
-		FREQUENCY=`awk -v OFS='\t' -F'[\t;]' '{for(i=1;i<=NF;i++) 
-		{if ($i ~ /^AO=/ || $i ~ /^DP=/) {print $i}}}' <(echo "${FILE}") \
-		| awk '{gsub("AO=","") ; printf $0 "\t" ; getline ; print $0}' \
-		| awk -v OFS='\t' -F'[\t,]' 'BEGIN{print "Variant_Allele_Frequency"} ; 
-		{gsub("DP=","") ; if ( $3 != "" ) {print $1/$3*100 ; print $2/$3*100}
-		else if ( $3 == "" ) print $1/$2*100}'`
+		FREQUENCY=`awk -v OFS='\t' -F'[\t;]' 'BEGIN{print "Variant_Read_Depth"} ; 
+		{for(i=1;i<=NF;i++)	{if ($i ~ /^AF=/) {print $i}}}' <(echo "${FILE}") \
+		| awk -v OFS='\t' -F'[\t,]' '{gsub("AF=","") ; 
+		if ( $2 != "" ) {print $1 ; print $2} else if ( $2 == "" ) print $1}'`
 		if [ -f "${1}.tmp" ]
 		then
 			paste ${1}.tmp <(echo "${FREQUENCY}") > ${1}.tmp1
