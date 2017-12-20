@@ -14,7 +14,7 @@ To run VCFextractor simply call the following command in the terminal
 COMMAND == VCFextractor.sh PATH/TO/FILE.vcf [OPTIONS] [OUTPUT]
 
 ## OPTIONS 
-If not options are included, all options will be outputted
+If not options are included, all options will be outputted  
 The order of the options placed in command will represent the output order
 
 --INFO == Output from VCF chromosome(#CHROM), position(POS), reference allele(REF) and alternative allele(ALT)  
