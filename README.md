@@ -1,4 +1,4 @@
-# VCFextractor
+## VCFextractor
 VCFextractor is a unix based software that requires no prerequisites to run.
 This script will take any VCF file and output functional information from the file itself,
 or from the ExAC rest api database http://exac.hms.harvard.edu 
@@ -31,5 +31,6 @@ If not options are included, all options will be outputted
 -tsv == Tab separated file (default)  
 -csv == Comma separated file
 
+# EXAMPLE
 
 
