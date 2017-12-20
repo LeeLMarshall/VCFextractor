@@ -1,19 +1,19 @@
-## VCFextractor
+# VCFextractor
 VCFextractor is a unix based software that requires no prerequisites to run.
 This script will take any VCF file and output functional information from the file itself,
 or from the ExAC rest api database http://exac.hms.harvard.edu 
 
-# INSTALL
+## INSTALL
 Download VCFextractor.sh  
 chmod 750 VCFextractor.sh. 
 export PATH=$PATH:/PATH/TO/VCFextractorDIRECTORY 
 
-# RUN
+## RUN
 To run VCFextractor simply call the following command in the terminal
 
 COMMAND == VCFextractor.sh PATH/TO/FILE.vcf [OPTIONS] [OUTPUT]
 
-# OPTIONS 
+## OPTIONS 
 If not options are included, all options will be outputted
 
 --INFO == Output from VCF chromosome(#CHROM), position(POS), reference allele(REF) and alternative allele(ALT)  
@@ -27,10 +27,10 @@ If not options are included, all options will be outputted
 --ExAC_ALL or --ExAC_allele_freq == Output from ExAC Browser Variant Allele Frequency()  
 --ExAC_ALL or --ExAC_rsid == Output from ExAC Browser Variant RSID()  
 
-# OUTPUT
+## OUTPUT
 -tsv == Tab separated file (default)  
 -csv == Comma separated file
 
-# EXAMPLE
+## EXAMPLE
 VCFextractor.sh coding_challenge_final.vcf  
 
