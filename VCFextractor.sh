@@ -25,12 +25,12 @@ COMMAND == VCFextractor.sh PATH/TO/FILE.vcf [OPTIONS] [OUTPUT]
 If not options are included, all options will be outputted
 
 --INFO == Output from VCF chromosome(#CHROM), position(POS), reference allele(REF) and alternative allele(ALT)
---TYPE or --Variant_Type == Output from VCF TYPE Variant Type(Variant_Type)
---DP or --Total_Read_Depth == Output from VCF DP Total Read Depth(Total_Read_Depth)
---AO or --Variant_Read_Depth == Output from VCF AO Variant Read Depth(Variant_Read_Depth)
---RO or --Reference_Read_Depth == Output from VCF RO Reference Read Depth(Reference_Read_Depth)
---AO/(AO+RO)x100 or --Percentage_Variant_Reads == Output from VCF Percentage Variant Reads(Percentage_Variant_Reads) 
---AO/DPx100 or --Variant_Allele_Frequency == Output from VCF Variant Allele Frequency(Variant_Allele_Frequency)
+--Variant_Type == Output from VCF TYPE Variant Type(Variant_Type)
+--Total_Read_Depth == Output from VCF DP Total Read Depth(Total_Read_Depth)
+--Variant_Read_Depth == Output from VCF AO Variant Read Depth(Variant_Read_Depth)
+--Reference_Read_Depth == Output from VCF RO Reference Read Depth(Reference_Read_Depth)
+--Percentage_Variant_Reads == Output from VCF Percentage Variant Reads(Percentage_Variant_Reads) 
+--Variant_Allele_Frequency == Output from VCF Variant Allele Frequency(Variant_Allele_Frequency)
 --ExAC_ALL or --ExAC_ordered_csqs == Output from ExAC Browser Variant Orderred Consequence(ExAC_ordered_csqs)
 --ExAC_ALL or --ExAC_allele_freq == Output from ExAC Browser Variant Allele Frequency(ExAC_allele_freq)
 --ExAC_ALL or --ExAC_rsid == Output from ExAC Browser Variant RSID(ExAC_rsid)
@@ -40,7 +40,17 @@ If not options are included, all options will be outputted
 -csv == Comma separated file
 
 ----- EXAMPLE
-VCFextractor.sh coding_challenge_final.vcf
+VCFextractor.sh coding_challenge_final.vcf \
+--Variant_Type \
+--ExAC_ordered_csqs \
+--Total_Read_Depth \
+--Variant_Read_Depth \
+--Percentage_Variant_Reads \
+--Variant_Allele_Frequency \
+--ExAC_allele_freq \
+--ExAC_rsid \
+--INFO \
+-csv
 '
 	exit 0
 #---------- Find VCF file
@@ -67,7 +77,7 @@ then
 		echo "INFO NOT OUTPUTTED"
 	fi
 	#---------- TYPE
-	if [ -z "${2}" ] || [[ "$@" == *"--TYPE"* ]] || [[ "$@" == *"--Variant_Type"* ]]
+	if [ -z "${2}" ] || [[ "$@" == *"--Variant_Type"* ]]
 	then 
 		echo "VARIANT TYPE OUTPUTTED == Variant_Type"
 		TYPE=`awk -v OFS='\t' -F'[\t;]' 'BEGIN{print "Variant_Type"} ; 
@@ -85,7 +95,7 @@ then
 		echo "VARIANT TYPE NOT OUTPUTTED"
 	fi
 	#---------- TOTAL READ DEPTH
-	if [ -z "${2}" ] || [[ "$@" == *"--DP"* ]] || [[ "$@" == *"--Total_Read_Depth"* ]]
+	if [ -z "${2}" ] || [[ "$@" == *"--Total_Read_Depth"* ]]
 	then 
 		echo "TOTAL READ DEPTH OUTPUTTED == Total_Read_Depth"
 		DEPTH=`awk -v OFS='\t' -F'[\t;]' 'BEGIN{print "Total_Read_Depth", "REF"} ; 
@@ -103,7 +113,7 @@ then
 		echo "TOTAL READ DEPTH NOT OUTPUTTED"
 	fi
 	#---------- VARIANT READ DEPTH
-	if [ -z "${2}" ] || [[ "$@" == *"--AO"* ]] || [[ "$@" == *"--Variant_Read_Depth"* ]]
+	if [ -z "${2}" ] || [[ "$@" == *"--Variant_Read_Depth"* ]]
 	then 
 		echo "VARIANT READ DEPTH OUTPUTTED == Variant_Read_Depth"
 		VARIANT=`awk -v OFS='\t' -F'[\t;]' 'BEGIN{print "Variant_Read_Depth"} ; 
@@ -121,7 +131,7 @@ then
 		echo "VARIANT READ DEPTH NOT OUTPUTTED"
 	fi
 	#---------- REFERENCE READ DEPTH
-	if [ -z "${2}" ] || [[ "$@" == *"--RO"* ]] || [[ "$@" == *"--Reference_Read_Depth"* ]]
+	if [ -z "${2}" ] || [[ "$@" == *"--Reference_Read_Depth"* ]]
 	then 
 		echo "REFERENCE READ DEPTH OUTPUTTED == Reference_Read_Depth"
 		REFERENCE=`awk -v OFS='\t' -F'[\t;]' 'BEGIN{print "Reference_Read_Depth", "REF"} ; 
@@ -139,7 +149,7 @@ then
 		echo "REFERENCE READ DEPTH NOT OUTPUTTED"
 	fi
 	#---------- PERCENTAGE VARIANT READS
-	if [ -z "${2}" ] || [[ "$@" == *"--AO/(AO+RO)x100"* ]] || [[ "$@" == *"--Percentage_Variant_Reads"* ]]
+	if [ -z "${2}" ] || [[ "$@" == *"--Percentage_Variant_Reads"* ]]
 	then 
 		echo "PERCENTAGE VARIANT READS OUTPUTTED == Percentage_Variant_Reads"
 		PERCENTAGE=`awk -v OFS='\t' -F'[\t;]' '{for(i=1;i<=NF;i++) 
@@ -159,7 +169,7 @@ then
 		echo "PERCENTAGE VARIANT READS NOT OUTPUTTED"
 	fi
 	#---------- VARIANT ALLELE FREQUENCY
-	if [ -z "${2}" ] || [[ "$@" == *"--AO/DPx100"* ]] || [[ "$@" == *"--Variant_Allele_Frequency"* ]]
+	if [ -z "${2}" ] || [[ "$@" == *"--Variant_Allele_Frequency"* ]]
 	then 
 		echo "VARIANT ALLELE FREQUENCY OUTPUTTED == Variant_Allele_Frequency"
 		FREQUENCY=`awk -v OFS='\t' -F'[\t;]' '{for(i=1;i<=NF;i++) 
@@ -307,6 +317,25 @@ then
 	else
 		echo "ExAC BROWSER NOT QUERIED"
 	fi
+	#---------- ORDER OUTPUT
+	if [[ "$@" == *"--"* ]]
+	then 
+		echo "SPECIFIC ORDER OUTPUTTED"
+		echo "$@" | sed 's/--INFO/--\#CHROM\ --POS\ --REF\ --ALT/' \
+		| sed 's/--ExAC_ALL/--ExAC_ordered_csqs\ --ExAC_allele_freq\ --ExAC_rsid/' \
+		| awk -v OFS='\t' '{for(i=1;i<=NF;i++) {if ($i ~ /^--/) print $i}}' \
+		| awk -v OFS='\t' '{print $0, NR}' | sort -k1,1 > ${1}.tmp_order
+		awk -v OFS='\t' 'NR==1{for(i=1;i<=NF;i++) {print $i, i}}' ${1}.tmp | sort -k1,1 > ${1}.tmp_order1
+		paste ${1}.tmp_order ${1}.tmp_order1 | sort -k2n > ${1}.tmp_order2
+		mv ${1}.tmp_order2 ${1}.tmp_order1
+		mv ${1}.tmp_order1 ${1}.tmp_order
+		awk 'NR==FNR {a[NR]=$4} NR!=FNR {for (i=1; i<NF; i++) {printf $a[i] "\t"} ; 
+		print $a[NF]}' ${1}.tmp_order ${1}.tmp > ${1}.tmp1
+		mv ${1}.tmp1 ${1}.tmp_order
+		mv ${1}.tmp_order ${1}.tmp
+	else
+		echo "SPECIFIC ORDER NOT OUTPUTTED"
+	fi
 	#---------- CREATE ${1}.tsv
 	if [ -f "${1}.tmp" ]
 	then
@@ -319,7 +348,7 @@ then
 		elif [[ "$@" == *"-csv"* ]]
 		then
 			echo "FILE FORMAT CSV"
-			awk -v OFS=',' -F'\t' '{print $0}' ${1}.tmp > ${1}.tmp1
+			awk 'BEGIN { FS="\t"; OFS="," } {$1=$1; print}' ${1}.tmp > ${1}.tmp1
 			mv ${1}.tmp1 ${1}.tmp
 			mv ${1}.tmp ${1}.csv
 			echo "OUTPUT == ${1}.csv"
