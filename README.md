@@ -32,7 +32,7 @@ If not options are included, all options will be outputted
 -csv == Comma separated file
 
 ## EXAMPLE
-VCFextractor.sh coding_challenge_final.vcf \
+VCFextractor.sh coding_challenge_final.vcf \\
 --Variant_Type \
 --ExAC_ordered_csqs \
 --Total_Read_Depth \
