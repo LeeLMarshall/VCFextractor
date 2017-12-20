@@ -32,14 +32,4 @@ If not options are included, all options will be outputted
 -csv == Comma separated file
 
 ## EXAMPLE
-VCFextractor.sh coding_challenge_final.vcf \\
---Variant_Type \
---ExAC_ordered_csqs \
---Total_Read_Depth \
---Variant_Read_Depth \
---Percentage_Variant_Reads \
---Variant_Allele_Frequency \
---ExAC_allele_freq \
---ExAC_rsid \
---INFO \
--csv
+VCFextractor.sh coding_challenge_final.vcf --Variant_Type --ExAC_ordered_csqs --Total_Read_Depth --Variant_Read_Depth --Percentage_Variant_Reads --Variant_Allele_Frequency --ExAC_allele_freq --ExAC_rsid --INFO -csv 
