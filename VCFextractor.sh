@@ -19,9 +19,9 @@ export PATH=$PATH:/PATH/TO/VCFextractorDIRECTORY
 ----- RUN
 To run VCFextractor simply call the following command in the terminal
 
-COMMAND == VCFextractor.sh PATH/TO/FILE.vcf [OPTIONS]
+COMMAND == VCFextractor.sh PATH/TO/FILE.vcf [OPTIONS] [OUTPUT]
 
-OPTIONS 
+----- OPTIONS 
 If not options are included, all options will be outputted
 
 --INFO == Output from VCF chromosome(#CHROM), position(POS), reference allele(REF) and alternative allele(ALT)
@@ -31,9 +31,16 @@ If not options are included, all options will be outputted
 --RO or --Reference_Read_Depth == Output from VCF RO Reference Read Depth(Reference_Read_Depth)
 --AO/(AO+RO)x100 or --Percentage_Variant_Reads == Output from VCF Percentage Variant Reads(Percentage_Variant_Reads) 
 --AO/DPx100 or --Variant_Allele_Frequency == Output from VCF Variant Allele Frequency(Variant_Allele_Frequency)
---ExAC_all or
---ExAC_all
---ExAC_all
+--ExAC_ALL or --ExAC_ordered_csqs == Output from ExAC Browser Variant Orderred Consequence(ExAC_ordered_csqs)
+--ExAC_ALL or --ExAC_allele_freq == Output from ExAC Browser Variant Allele Frequency(ExAC_allele_freq)
+--ExAC_ALL or --ExAC_rsid == Output from ExAC Browser Variant RSID(ExAC_rsid)
+
+----- OUTPUT
+-tsv == Tab separated file (default)
+-csv == Comma separated file
+
+----- EXAMPLE
+VCFextractor.sh coding_challenge_final.vcf
 '
 	exit 0
 #---------- Find VCF file
